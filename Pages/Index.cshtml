@@ -1,0 +1,137 @@
+﻿@page
+@model task_manager.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Task Manager</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f7f7f7;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        form {
+            margin-top: 20px;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input, button {
+            display: block;
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+        td, th {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: #333;">Task Manager</h1>
+    <h2 style="color: #333;">All Tasks</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Completion Status</th>
+                <th>Completion Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.Tasks)
+            {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Description</td>
+                    <td>@task.DueDate.ToString("MM-dd-yyyy")</td>
+                    <td>@(task.IsCompleted ? "Complete" : "Incomplete")</td>
+                    <td>
+                        @if (task.CompletionDate.HasValue)
+                        {
+                            <span>@task.CompletionDate.Value.ToString("MM-dd-yyyy")</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        <form method="post" asp-page-handler="RemoveTask">
+                            <input type="hidden" name="taskId" value="@task.Id" />
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-page-handler="MarkCompleted">
+                            <input type="hidden" name="taskId" value="@task.Id" />
+                            <button type="submit">Mark Complete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h1 style="color: #333;">Edit Task</h1>
+    <form method="post" asp-page-handler="EditTask">
+        <input type="number" name="id" />
+        <input type="text" name="newDescription" placeholder="New Description" />
+        <input type="date" name="newDueDate" />
+
+        <button type="submit" style="background-color: #4CAF50; color: white;">Edit</button>
+    </form>
+
+    <h1 style="color: #333;">Add Task</h1>
+    <form method="post" asp-page-handler="AddTask">
+        <input type="text" name="addTask.Description" placeholder="New Description" />
+        <input type="date" name="addTask.DueDate" />
+
+        <button type="submit" style="background-color: #4CAF50; color: white;">Add</button>
+    </form>
+</body>
+</html>
