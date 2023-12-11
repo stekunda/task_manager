@@ -29,29 +29,29 @@ namespace task_manager.Controllers
 
         public string GetAllTasks()
         {
-            string final = "";
+            string allTasks = "";
             for (int i = 1; i <= IndexModel.tasks.Count; i++)
             {
                 var task = IndexModel.tasks.FirstOrDefault(t => t.Id == i);
                 string task_string = task.Id.ToString() + " " + task.Description + " " + task.DueDate + " " + task.IsCompleted + " " + task.CompletionDate + "\n";
-                final += task_string;
+                allTasks += task_string;
             }
-            return final;
+            return allTasks;
         }
 
         public string GetAllCompletedTasks()
         {
-            string final = "";
+            string allTasks = "";
             for (int i = 1; i <= IndexModel.tasks.Count; i++)
             {
                 var task = IndexModel.tasks.FirstOrDefault(t => t.Id == i);
                 string task_string = task.Id.ToString() + " " + task.Description + " " + task.DueDate + " " + task.IsCompleted + " " + task.CompletionDate + "\n";
                 if (task.IsCompleted)
                 {
-                    final += task_string;
+                    allTasks += task_string;
                 }
             }
-            return final;
+            return allTasks;
         }
 
         [Route("{id:int}")]
